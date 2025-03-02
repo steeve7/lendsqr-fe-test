@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+:root{
+  --font-avenir: Avenir Next;
+  --font-work: Work Sans;
+  --font-roboto: Roboto;
+}
+
+:root {
+  --custom-blue: rgba(33, 63, 125, 1);
+  --icon-custom-blue: rgba(33, 63, 125, 0.1);
+  --custom-light-blue: rgba(84, 95, 125, 1);
+  --custom-bg-Lightblue: rgba(84, 95, 125, 0.15);
+  --custom-grey-blue: rgba(57, 205, 204, 1);
+  --button-custom-blue: rgba(57, 205, 204, 1);
+  --search-custom-blue: rgba(57, 205, 204, 1);
+  --filter-custom-blue:rgba(57, 205, 204, 1)
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffff;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.text-custom-blue {
+  color: var(--custom-blue);
+  /* border: 2px solid var(--custom-blue); */
+}
+.text-custon-lightBlue{
+  color:var(--custom-light-blue)
+}
+/* .bg-custom-blueInput{
+  border: 2px solid var(--custom-bg-Lightblue);
+} */
+.text-forget-blue{
+  color: var(--custom-grey-blue)
+}
+.button-blue{
+  background: var(--button-custom-blue);
+}
+.filter-blue{
+  border: 2px solid var(--filter-custom-blue);
+}
+.font-avenir{
+  font-family: var(--font-avenir);
+}
+
+.font-work{
+  font-family: var(--font-work);
+}
+.font-roboto{
+  font-family: var(--font-roboto);
+}
+.search-blue{
+  background: var(--search-custom-blue);
+}
+.icon-blue{
+  background: var(--icon-custom-blue);
+}
+
+.icon-text-blue{
+  border: 2px solid var(--icon-custom-blue);
+}
