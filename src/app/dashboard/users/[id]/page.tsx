@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import Link from "next/link";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { AiOutlineUser } from "react-icons/ai";
@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserDetails } from "@/redux/userDetailsSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 
-export default function page() {
+export default function Page() {
+   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams() as { id: string };
-  const dispatch = useDispatch<AppDispatch>();
 
   // Dispatch thunk on mount whenever id changes
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function page() {
             <div className="border text-custom-blue w-20 md:rotate-90" />
             <div className="flex flex-col gap-2">
               <h5 className="front-work font-medium text-[10px] lg:text-[14px] text-custon-lightBlue">
-                User's Tier
+                Users Tier
               </h5>
               <div className="flex flex-row gap-2 text-[10px] lg:text-[20px]">
                 <MdOutlineStarOutline color="yellow" />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { selectShowpassword, toggleShowpassword } from "@/redux/sidebarSlice";
 
-export default function page() {
+export default function Page(){
   const dispatch = useDispatch();
   const showPassword = useSelector(selectShowpassword)
 

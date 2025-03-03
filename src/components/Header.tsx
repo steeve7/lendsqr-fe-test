@@ -2,7 +2,6 @@
   import React from 'react'
   import { MdMenu, MdClose } from "react-icons/md";
   import { LuSearch } from "react-icons/lu";
-  import { RootState } from "@/redux/store";
   import { useSelector, useDispatch } from "react-redux";
   import {
     toggleSearch,

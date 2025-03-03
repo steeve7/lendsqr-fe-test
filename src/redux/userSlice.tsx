@@ -1,5 +1,5 @@
 // userSlice.ts
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Users{
   id: string;
@@ -31,12 +31,20 @@ interface UserState {
   users: Users[];
   loading: boolean;
   error: string | null;
+  entries: number;
+  currentPage: number;
+  openDropdownId: string | null;
+  filter: boolean;
 }
 
 const initialState: UserState = {
   users: [],
   loading: false,
   error: null,
+  entries: 100,
+  currentPage: 1,
+  openDropdownId: null,
+  filter: false,
 };
 
 export const fetchUsers = createAsyncThunk(
@@ -63,7 +71,18 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    // add any synchronous reducers if needed
+    setEntries(state, action: PayloadAction<number>) {
+      state.entries = action.payload;
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
+    },
+    setOpenDropdownId(state, action: PayloadAction<string | null>) {
+      state.openDropdownId = action.payload;
+    },
+    toggleFilter(state) {
+      state.filter = !state.filter;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -82,4 +101,6 @@ const userSlice = createSlice({
   },
 });
 
+export const { setEntries, setCurrentPage, setOpenDropdownId, toggleFilter } =
+  userSlice.actions;
 export default userSlice.reducer;
