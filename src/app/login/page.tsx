@@ -1,9 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React from"react";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { selectShowpassword, toggleShowpassword } from "@/redux/sidebarSlice";
 
 export default function page() {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const showPassword = useSelector(selectShowpassword)
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex justify-center">
@@ -32,8 +35,7 @@ export default function page() {
                 />
                 <span
                   className="font-avenir absolute inset-y-0 right-32 mt-48 flex items-center pr-4 cursor-pointer text-[12px] font-medium text-blue-600 select-none"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
+                  onClick={() => dispatch(toggleShowpassword())}>
                   {showPassword ? "Hide" : "Show"}
                 </span>
                 <Link

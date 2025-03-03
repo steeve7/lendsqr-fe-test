@@ -6,38 +6,15 @@ import { IoFilterSharp } from "react-icons/io5";
 import { FiChevronDown, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers, Users} from "@/redux/userSlice";
+import type { AppDispatch, RootState } from "@/redux/store";
 
 interface CheckList {
   image: string;
   name: String;
   number: string;
   bgColor: string;
-}
-
-interface User {
-  id: string;
-  organisation: string;
-  name: string;
-  email: string;
-  phone: string;
-  date: string;
-  status: "active" | "inactive" | "pending" | "blacklisted";
-  bvn: string;
-  gender: string;
-  maritalstatus: string;
-  children: number;
-  typeofresidence: string;
-  levelofeducation: string;
-  employmentstatus: string;
-  sectorofemployment: string;
-  durationofemployment: string;
-  officemail: string;
-  monthlyincome: string;
-  loanrepayment: string;
-  twitter: string;
-  facebook: string;
-  instagram: string;
-  relationship: string;
 }
 
 const check: CheckList[] = [
@@ -72,33 +49,17 @@ export default function page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [filter, setFilter] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [users, setUsers] = useState<User[]>([]);
-  const totalPages = 16;
+  const totalPages = 16
   const router = useRouter();
+  const { users, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
+   // Use the typed dispatch
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setError("");
-      try {
-        const response = await fetch(
-          "https://67c14e7461d8935867e27cf7.mockapi.io/api/users/users"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error: unknown) {
-        setError(
-          `Error fetching users: ${
-            error instanceof Error ? error.message : error
-          }`
-        );
-      }
-    };
-    fetchUsers();
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   if (error) {
     return <p className="text-red-500">{error}</p>;
@@ -108,7 +69,7 @@ export default function page() {
     return <p>No users found.</p>;
   }
 
-  const handleUserDetail = (user: User) => {
+  const handleUserDetail = (user: Users ) => {
     // Store the selected user details in localStorage
     localStorage.setItem("selctedUser", JSON.stringify(user));
     router.push(`/dashboard/users/${user.id}`);
@@ -120,7 +81,7 @@ export default function page() {
     setOpenDropdownId((prev) => (prev === userId ? null : userId));
   };
 
-  const statusMap: { [key in User["status"]]: string } = {
+  const statusMap: { [key in Users["status"]]: string } = {
     active: "Active",
     inactive: "Inactive",
     pending: "Pending",
@@ -153,8 +114,9 @@ export default function page() {
           </div>
         ))}
       </div>
-      <div className="w-full p-4 overflow-auto mt-10 overflow-x-scroll md:overflow-auto max-w-7xl 2xl:max-w-none">
-        <table className="border-collapse rounded-lg shadow-md bg-white min-w-full table-auto overflow-scroll md:overflow-auto w-full border ">
+      <div className="w-full p-4 mt-10">
+        <div className="overflow-x-auto">
+        <table className="min-w-[600px] table-auto border-collapse rounded-lg shadow-md bg-white w-full border">
           <thead>
             <tr className="text-left text-custom-blue text-sm font-work font-medium text-[12px]">
               {[
@@ -452,6 +414,8 @@ export default function page() {
           </div>
         </div>
       </div>
+      </div>
+      
     </div>
   );
 }

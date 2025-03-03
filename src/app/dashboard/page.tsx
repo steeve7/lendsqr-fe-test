@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>
-      dashboard
+    <div className='h-screnn w-full'>
+      Dashboard page
     </div>
   )
 }

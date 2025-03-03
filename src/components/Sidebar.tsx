@@ -1,7 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { RiArrowDropRightLine } from "react-icons/ri";
+import { toggleOrganisation, selectOrganisation } from "@/redux/sidebarSlice";
+import { RootState } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
 
 interface DashboardMenu {
   name: string;
@@ -18,7 +21,11 @@ export default function Sidebar({
   isSidebarOpen,
   toggleSidebar,
 }: SidebarProps) {
-  const [isSwitchOrgOpen, setIsSwitchOrgOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const isSwitchOrgOpen: boolean =
+    useSelector((state: RootState) => selectOrganisation(state)) ?? false;
+
   const router = useRouter();
 
   const handleMenuClick = (menuName: string): void => {
@@ -84,7 +91,7 @@ export default function Sidebar({
       >
         <div
           className="flex items-center justify-between cursor-pointer p-2"
-          onClick={() => setIsSwitchOrgOpen(!isSwitchOrgOpen)}
+          onClick={() => dispatch(toggleOrganisation())}
         >
           <div className="flex items-start justify-start gap-2">
             <img

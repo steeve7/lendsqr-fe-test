@@ -5,77 +5,25 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineStarOutline } from "react-icons/md";
 import { useParams } from "next/navigation";
-
-interface UserDetails {
-  id: string;
-  organisation: string;
-  name: string;
-  email: string;
-  phone: string;
-  date: string;
-  status: "active" | "inactive" | "pending" | "blacklisted";
-  bvn: string;
-  gender: string;
-  maritalstatus: string;
-  children: number;
-  typeofresidence: string;
-  levelofeducation: string;
-  employmentstatus: string;
-  sectorofemployment: string;
-  durationofemployment: string;
-  officemail: string;
-  monthlyincome: string;
-  loanrepayment: string;
-  twitter: string;
-  facebook: string;
-  instagram: string;
-  relationship: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserDetails } from "@/redux/userDetailsSlice";
+import { RootState, AppDispatch } from "@/redux/store";
 
 export default function page() {
   const { id } = useParams() as { id: string };
-  const [usersDetails, setUsersDetails] = useState<UserDetails | null>(null);
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
 
+  // Dispatch thunk on mount whenever id changes
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        // Try to get user data from localStorage using a consistent key "selectedUser"
-        const storedUser = localStorage.getItem("selectedUser");
-        if (storedUser) {
-          const parsedUser: UserDetails = JSON.parse(storedUser);
-          // Check if the stored user's id matches the id from URL
-          if (parsedUser && parsedUser.id === id) {
-            setUsersDetails(parsedUser);
-            return;
-          }
-        }
+    if (id) {
+      dispatch(fetchUserDetails(id));
+    }
+  }, [dispatch, id]);
 
-        // If no valid localStorage data, fetch from API
-        setLoading(true);
-
-        const res = await fetch(
-          `https://67c14e7461d8935867e27cf7.mockapi.io/api/users/users/${id}`
-        );
-        if (!res.ok) {
-          throw new Error("failed to fetch user details.");
-        }
-        const data: UserDetails = await res.json();
-        setUsersDetails(data);
-        // Save the fetched data to localStorage for later use.
-        localStorage.setItem("selectedUser", JSON.stringify(data));
-      } catch (error: unknown) {
-        setError(
-          `User details not available: ${
-            error instanceof Error ? error.message : error
-          }`
-        );
-      }
-      setLoading(false);
-    };
-    fetchUserDetails();
-  }, [id]);
+  // Get user details from Redux store
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.userDetail
+  );
 
   if (loading) {
     return <p>Loading user details...</p>;
@@ -85,7 +33,7 @@ export default function page() {
     return <p className="text-red-500">{error}</p>;
   }
 
-  if (!usersDetails) {
+  if (!user) {
     return <p>No user details found.</p>;
   }
 
@@ -126,10 +74,10 @@ export default function page() {
 
               <div className="flex flex-col justify-start items-center gap-2">
                 <h2 className="font-work font-medium lg:text-[22px] text-[15px] text-custon-lightBlue">
-                  {usersDetails.name}
+                  {user.name}
                 </h2>
                 <p className="font-work font-normal text-[10px] lg:text-[14px] text-custon-lightBlue">
-                  {usersDetails.id}
+                  {user.id}
                 </p>
               </div>
             </div>
@@ -187,7 +135,7 @@ export default function page() {
               Full Name
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.name}
+              {user.name}
             </p>
           </div>
           <div>
@@ -195,7 +143,7 @@ export default function page() {
               Phone Number
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.phone}
+              {user.phone}
             </p>
           </div>
           <div>
@@ -203,7 +151,7 @@ export default function page() {
               Email Address
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.email}
+              {user.email}
             </p>
           </div>
           <div>
@@ -211,7 +159,7 @@ export default function page() {
               BVN
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.bvn}
+              {user.bvn}
             </p>
           </div>
           <div>
@@ -219,7 +167,7 @@ export default function page() {
               Gender
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.gender}
+              {user.gender}
             </p>
           </div>
           <div>
@@ -227,7 +175,7 @@ export default function page() {
               Marital Status
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.maritalstatus}
+              {user.maritalstatus}
             </p>
           </div>
           <div>
@@ -235,7 +183,7 @@ export default function page() {
               Children
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.children}
+              {user.children}
             </p>
           </div>
           <div>
@@ -243,7 +191,7 @@ export default function page() {
               Type Of Residence
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.typeofresidence}
+              {user.typeofresidence}
             </p>
           </div>
         </div>
@@ -257,7 +205,7 @@ export default function page() {
               Level Of education
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.levelofeducation}
+              {user.levelofeducation}
             </p>
           </div>
           <div>
@@ -265,7 +213,7 @@ export default function page() {
               Employment Status
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.employmentstatus}
+              {user.employmentstatus}
             </p>
           </div>
           <div>
@@ -273,7 +221,7 @@ export default function page() {
               Sector of employment
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.sectorofemployment}
+              {user.sectorofemployment}
             </p>
           </div>
           <div>
@@ -281,7 +229,7 @@ export default function page() {
               Duration of employment
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.durationofemployment}
+              {user.durationofemployment}
             </p>
           </div>
           <div>
@@ -289,7 +237,7 @@ export default function page() {
               office email
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.officemail}
+              {user.officemail}
             </p>
           </div>
           <div>
@@ -297,7 +245,7 @@ export default function page() {
               monthly income
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.monthlyincome}
+              {user.monthlyincome}
             </p>
           </div>
           <div>
@@ -305,7 +253,7 @@ export default function page() {
               Loan repayment
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.loanrepayment}
+              {user.loanrepayment}
             </p>
           </div>
         </div>
@@ -319,7 +267,7 @@ export default function page() {
               Twitter
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.twitter}
+              {user.twitter}
             </p>
           </div>
           <div>
@@ -327,7 +275,7 @@ export default function page() {
               Facebook
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.facebook}
+              {user.facebook}
             </p>
           </div>
           <div>
@@ -335,7 +283,7 @@ export default function page() {
               instagram
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.instagram}
+              {user.instagram}
             </p>
           </div>
         </div>
@@ -349,7 +297,7 @@ export default function page() {
               Full name
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.name}
+              {user.name}
             </p>
           </div>
           <div>
@@ -357,7 +305,7 @@ export default function page() {
               phone number
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.phone}
+              {user.phone}
             </p>
           </div>
           <div>
@@ -365,7 +313,7 @@ export default function page() {
               Email address
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.email}
+              {user.email}
             </p>
           </div>
           <div>
@@ -373,7 +321,7 @@ export default function page() {
               Relationship
             </h2>
             <p className="font-work font-medium text-[16px] text-custon-lightBlue">
-              {usersDetails.relationship}
+              {user.relationship}
             </p>
           </div>
         </div>
