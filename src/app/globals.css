@@ -46,9 +46,9 @@ body {
 .text-custon-lightBlue{
   color:var(--custom-light-blue)
 }
-/* .bg-custom-blueInput{
+.bg-custom-blueInput{
   border: 2px solid var(--custom-bg-Lightblue);
-} */
+}
 .text-forget-blue{
   color: var(--custom-grey-blue)
 }
